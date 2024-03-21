@@ -28,12 +28,8 @@ def index():
 class RestaurantClass(Resource):
     def get(self):
         # import ipdb; ipdb.set_trace()
-        restaurant_list = [
-            restaurant.to_dict(rules=("-restaurant_pizzas",))
-            for restaurant in Restaurant.query.all()
-        ]
+        restaurant_list = [restaurant.to_dict(rules=("-restaurant_pizzas",)) for restaurant in Restaurant.query.all()]
         return make_response(restaurant_list, 200)
-
 
 api.add_resource(RestaurantClass, "/restaurants")
 
