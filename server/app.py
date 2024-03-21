@@ -36,21 +36,21 @@ api.add_resource(RestaurantClass, "/restaurants")
 
 class RestaurantById(Resource):
     def get(self, id):
-        res = Restaurant.query.filter_by(id=id).one_or_none()
+        restaurant = Restaurant.query.filter_by(id=id).one_or_none()
 
         # import ipdb; ipdb.set_trace()
-        if res is not None:
-            return make_response(res.to_dict(), 200)
+        if restaurant is not None:
+            return make_response(restaurant.to_dict(), 200)
         else:
             return make_response({"error": "Restaurant not found"}, 404)
 
     def delete(self, id):
-        res = Restaurant.query.filter_by(id=id).one_or_none()
+        restaurant = Restaurant.query.filter_by(id=id).one_or_none()
 
-        if res is None:
+        if restaurant is None:
             return make_response({"error": "Restaurant not found"}, 404)
 
-        db.session.delete(res)
+        db.session.delete(restaurant)
         db.session.commit()
         return make_response({}, 204)
 
@@ -60,12 +60,8 @@ api.add_resource(RestaurantById, "/restaurants/<int:id>")
 
 class PizzaClass(Resource):
     def get(self):
-        all_pizzas = [
-            pizza.to_dict(only=("id", "ingredients", "name"))
-            for pizza in Pizza.query.all()
-        ]
+        all_pizzas = [pizza.to_dict(only=("id", "ingredients", "name")) for pizza in Pizza.query.all()]
         return make_response(all_pizzas, 200)
-
 
 api.add_resource(PizzaClass, "/pizzas")
 
